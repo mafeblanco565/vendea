@@ -45,19 +45,18 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     }
 
     const dt = Math.min(delta, 0.1);
-    const pointerStrength = THREE.MathUtils.clamp(Math.hypot(pointer.current.x, pointer.current.y), 0, 1);
-    const idleInfluence = 1 - pointerStrength * 0.85;
-    const idleYaw = Math.sin(clock.elapsedTime * 0.9) * 0.72;
-    const idlePitch = Math.sin(clock.elapsedTime * 0.62 + 1.1) * 0.12;
-    const targetYaw = pointer.current.x * 0.82 + idleYaw * idleInfluence;
-    const targetPitch = -pointer.current.y * 0.3 + idlePitch * idleInfluence;
+    const idleYaw = Math.sin(clock.elapsedTime * 1.18) * 0.9;
+    const idlePitch = Math.sin(clock.elapsedTime * 0.8 + 1.1) * 0.14;
+    // El cursor complementa el ciclo; nunca lo cancela al quedarse inmóvil en una esquina.
+    const targetYaw = THREE.MathUtils.clamp(idleYaw + pointer.current.x * 0.38, -1.05, 1.05);
+    const targetPitch = THREE.MathUtils.clamp(idlePitch - pointer.current.y * 0.22, -0.36, 0.36);
     const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
 
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 4.4, dt);
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 4.4, dt);
-    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.075 + Math.sin(clock.elapsedTime * 0.9) * -0.035, 4.4, dt);
-    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.14 + Math.sin(clock.elapsedTime * 0.9) * 0.035, 4.4, dt);
-    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.075, 4.4, dt);
+    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 6.4, dt);
+    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 6.4, dt);
+    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.045 + Math.sin(clock.elapsedTime * 1.18) * -0.055, 6.4, dt);
+    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.08 + Math.sin(clock.elapsedTime * 1.18) * 0.045, 6.4, dt);
+    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.045, 6.4, dt);
   });
 
   return <group ref={groupRef}><primitive object={model} /></group>;
