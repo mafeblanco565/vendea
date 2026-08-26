@@ -45,23 +45,26 @@ function Model({ url, pointer, onReady, reducedMotion }: { url: string; pointer:
     }
 
     const dt = Math.min(delta, 0.1);
-    // prefers-reduced-motion anula SOLO el movimiento autonomo (las
-    // oscilaciones de reposo). El seguimiento del cursor se conserva: es
-    // manipulacion directa del usuario, no animacion que ocurra sola.
+    // prefers-reduced-motion anula SOLO el movimiento autonomo (oscilacion y
+    // flotacion). El giro hacia el cursor se conserva: es manipulacion directa
+    // del usuario, no animacion que ocurra sola.
     const idle = reducedMotion ? 0 : 1;
-    const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24 * idle;
-    const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055 * idle;
-    const targetYaw = pointer.current.x * 0.68 + idleYaw;
+    // Oscilacion de reposo: presente para que no se vea muerto con el mouse
+    // quieto, pero subordinada al cursor. El cursor manda.
+    const idleYaw = Math.sin(clock.elapsedTime * 1.18) * 0.3 * idle;
+    const idlePitch = Math.sin(clock.elapsedTime * 0.8 + 1.1) * 0.06 * idle;
+    // El clamp evita que la suma de ciclo + cursor sobregire la cabeza.
+    const targetYaw = THREE.MathUtils.clamp(idleYaw + pointer.current.x * 0.75, -1.05, 1.05);
     // SIN el signo menos: en three.js un rotation.x positivo apunta la cara
     // hacia abajo, y clientY ya crece hacia abajo. Negarlo invierte el eje.
-    const targetPitch = pointer.current.y * 0.26 + idlePitch;
+    const targetPitch = THREE.MathUtils.clamp(idlePitch + pointer.current.y * 0.28, -0.36, 0.36);
     const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055 * idle;
 
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 7.2, dt);
-    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.075, 7.2, dt);
-    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.14, 6.2, dt);
-    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.075, 6.2, dt);
+    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 6.4, dt);
+    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 6.4, dt);
+    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.045 + Math.sin(clock.elapsedTime * 1.18) * -0.055 * idle, 6.4, dt);
+    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.08 + Math.sin(clock.elapsedTime * 1.18) * 0.045 * idle, 6.4, dt);
+    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.045, 6.4, dt);
   });
 
   return <group ref={groupRef}><primitive object={model} /></group>;
