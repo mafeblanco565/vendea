@@ -69,7 +69,7 @@ const solutions = [
   {
     number: "02",
     label: "Comercio que se entiende",
-    title: "Marketplace Shopify",
+    title: "Marketplace, Shopify o a medida en código",
     description:
       "Convertimos catálogo y compra en una ruta directa, desde el primer vistazo hasta el checkout.",
     includes: ["Arquitectura de tienda", "Colecciones y catálogo", "Configuración de producto", "Experiencia de compra responsive"],
