@@ -11,7 +11,7 @@ interface HeroAvatar3DProps {
   fallbackSrc: string;
 }
 
-function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableRefObject<PointerPosition>; onReady: () => void }) {
+function Model({ url, pointer, onReady, reducedMotion }: { url: string; pointer: React.MutableRefObject<PointerPosition>; onReady: () => void; reducedMotion: boolean }) {
   // El GLB del hero usa Meshopt; evitamos inicializar Draco y activamos su decodificador de forma explícita.
   const { scene } = useGLTF(url, false, true);
   const groupRef = useRef<THREE.Group>(null);
@@ -45,13 +45,17 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     }
 
     const dt = Math.min(delta, 0.1);
-    const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24;
-    const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055;
+    // prefers-reduced-motion anula SOLO el movimiento autonomo (las
+    // oscilaciones de reposo). El seguimiento del cursor se conserva: es
+    // manipulacion directa del usuario, no animacion que ocurra sola.
+    const idle = reducedMotion ? 0 : 1;
+    const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24 * idle;
+    const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055 * idle;
     const targetYaw = pointer.current.x * 0.68 + idleYaw;
     // SIN el signo menos: en three.js un rotation.x positivo apunta la cara
     // hacia abajo, y clientY ya crece hacia abajo. Negarlo invierte el eje.
     const targetPitch = pointer.current.y * 0.26 + idlePitch;
-    const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
+    const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055 * idle;
 
     group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
     group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 7.2, dt);
@@ -78,7 +82,7 @@ function Lighting() {
 export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProps) {
   const pointer = useRef<PointerPosition>({ x: 0, y: 0 });
   const [ready, setReady] = useState(false);
-  const [useStaticFallback, setUseStaticFallback] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const updatePointerPosition = (clientX: number, clientY: number) => {
     pointer.current.x = THREE.MathUtils.clamp((clientX / window.innerWidth) * 2 - 1, -1, 1);
@@ -87,14 +91,13 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updateMode = () => setUseStaticFallback(media.matches);
+    const updateMode = () => setReducedMotion(media.matches);
     updateMode();
     media.addEventListener("change", updateMode);
     return () => media.removeEventListener("change", updateMode);
   }, []);
 
   useEffect(() => {
-    if (useStaticFallback) return;
     const updatePointer = (event: PointerEvent) => {
       updatePointerPosition(event.clientX, event.clientY);
     };
@@ -106,11 +109,7 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
       window.removeEventListener("pointermove", updatePointer);
       document.removeEventListener("pointerleave", resetPointer);
     };
-  }, [useStaticFallback]);
-
-  if (useStaticFallback) {
-    return <img className="avatar-3d-poster is-static" src={fallbackSrc} alt="Avatar de Vendea" draggable={false} />;
-  }
+  }, []);
 
   return (
     <div
@@ -134,7 +133,7 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
       >
         <Lighting />
         <Suspense fallback={null}>
-          <Model url={modelUrl} pointer={pointer} onReady={() => setReady(true)} />
+          <Model url={modelUrl} pointer={pointer} onReady={() => setReady(true)} reducedMotion={reducedMotion} />
         </Suspense>
       </Canvas>
     </div>
