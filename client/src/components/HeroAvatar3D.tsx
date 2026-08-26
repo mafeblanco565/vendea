@@ -45,17 +45,19 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     }
 
     const dt = Math.min(delta, 0.1);
-    const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24;
-    const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055;
-    const targetYaw = pointer.current.x * 0.68 + idleYaw;
-    const targetPitch = -pointer.current.y * 0.26 + idlePitch;
+    const pointerStrength = THREE.MathUtils.clamp(Math.hypot(pointer.current.x, pointer.current.y), 0, 1);
+    const idleInfluence = 1 - pointerStrength * 0.85;
+    const idleYaw = Math.sin(clock.elapsedTime * 0.9) * 0.72;
+    const idlePitch = Math.sin(clock.elapsedTime * 0.62 + 1.1) * 0.12;
+    const targetYaw = pointer.current.x * 0.82 + idleYaw * idleInfluence;
+    const targetPitch = -pointer.current.y * 0.3 + idlePitch * idleInfluence;
     const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
 
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 7.2, dt);
-    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.075, 7.2, dt);
-    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.14, 6.2, dt);
-    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.075, 6.2, dt);
+    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 4.4, dt);
+    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 4.4, dt);
+    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.075 + Math.sin(clock.elapsedTime * 0.9) * -0.035, 4.4, dt);
+    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.14 + Math.sin(clock.elapsedTime * 0.9) * 0.035, 4.4, dt);
+    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.075, 4.4, dt);
   });
 
   return <group ref={groupRef}><primitive object={model} /></group>;
