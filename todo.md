@@ -1,0 +1,92 @@
+- [x] Preparar y cargar las variantes frontal, lateral y superior del avatar.
+- [x] Sustituir el módulo gráfico del hero por el avatar reactivo al cursor.
+- [x] Ajustar la interacción para pantalla táctil y movimiento reducido.
+- [x] Verificar en escritorio y móvil, guardar el checkpoint y entregar la revisión.
+- [x] Retirar los cambios de pose basados en varias imágenes.
+- [x] Aplicar un seguimiento continuo con una sola pose frontal y parallax 3D.
+- [x] Validar el movimiento en escritorio, así como el estado estable en móvil.
+- [x] Mapear las cuatro vistas del avatar a una progresión continua de scroll.
+- [x] Construir un módulo independiente de animación por desplazamiento y retirar el efecto de cursor.
+- [x] Comprobar una transición intermedia de frente a perfil durante el desplazamiento.
+- [x] Confirmar que el progreso de la secuencia responde también al scroll inverso.
+- [x] Verificar las transiciones, el comportamiento de regreso al hacer scroll inverso y la versión móvil; confirmar que el copy aparece desde la primera vista.
+- [x] Convertir la lógica de cuatro direcciones del componente en progreso de scroll suavizado.
+- [x] Integrar el componente adaptado en la escena independiente del avatar.
+- [x] Comprobar la sincronización inicial entre pose frontal e indicador de secuencia.
+- [x] Comprobar el perfil izquierdo y el indicador 02 en el segundo tramo de scroll.
+- [x] Comprobar el perfil derecho y el indicador 04 en el tramo final de scroll.
+- [x] Validar la página completa en escritorio y móvil, incluida la secuencia reversible.
+- [x] Revisar ambos componentes adjuntos y confirmar los recursos que requieren.
+- [x] Adaptar el enfoque viable al avatar sin sustituir la landing funcional por un placeholder.
+- [x] Comprobar el estado estable del avatar tras el damping y la respuesta sutil al puntero.
+- [x] Verificar la animación integrada y guardar la actualización revisada.
+- [x] Trasladar la secuencia de cuatro vistas al avatar del hero.
+- [x] Retirar la sección independiente duplicada y sus estilos asociados.
+- [x] Verificar el hero único y la landing responsive antes de guardar la corrección.
+- [x] Definir y aplicar una paleta, tipografía y movimiento de carácter más expresivo.
+- [x] Reinterpretar hero, navegación, soluciones y arquitecturas con formas orgánicas y composiciones lúdicas.
+- [x] Verificar el rediseño completo en escritorio y móvil antes de guardar la versión final.
+- [x] Generar y seleccionar recursos visuales expresivos para complementar el rediseño.
+- [x] Corregir el bloque marfil desproporcionado del manifiesto y el recorte de tarjetas de soluciones.
+- [x] Eliminar el rótulo “SISTEMAS DE CONVERSIÓN” del hero.
+- [x] Preparar las vistas frontal, superior e izquierda/derecha del avatar para cursor.
+- [x] Sustituir el control de avatar por scroll por un seguimiento fluido de cursor y validar la landing.
+- [x] Eliminar las etiquetas auxiliares, los indicadores de dirección y el aviso de scroll del hero.
+- [x] Ajustar color, capa de apoyo y contraste de textos sobre fondos oscuros.
+- [x] Verificar el hero limpio, las tarjetas corregidas y el contraste en escritorio y móvil.
+- [x] Retirar el texto fantasma oscuro del manifiesto.
+- [x] Verificar la legibilidad del manifiesto corregido.
+- [x] Ajustar el encuadre de las imágenes y el tamaño interno de las cards de soluciones.
+- [x] Verificar que las tres cards se vean completas en escritorio y móvil.
+- [x] Cargar el video adjunto como recurso estático de la landing.
+- [x] Reemplazar la transición oscura por el video en bucle, sin sonido y con encuadre responsive.
+- [x] Verificar la reproducción del video en escritorio y móvil.
+- [x] Definir el mensaje visual de sistema, identidad, comercio y conversación.
+- [x] Generar recursos explicativos sin texto para las zonas oscuras.
+- [x] Integrar y verificar las nuevas imágenes en escritorio y móvil.
+- [x] Cargar la imagen de empaque suministrada para Brand System.
+- [x] Reemplazar la imagen actual y verificar el encuadre de la card en escritorio y móvil.
+- [x] Cargar la nueva referencia panorámica de Brand System.
+- [x] Aplicar el encuadre horizontal y verificar su visualización responsive.
+- [x] Cargar la imagen panorámica suministrada para Marketplace Shopify.
+- [x] Reemplazar la imagen actual y verificar el encuadre de Marketplace Shopify en escritorio y móvil.
+- [x] Cargar la imagen panorámica suministrada para Agente Conversacional IA.
+- [x] Reemplazar la imagen del agente y eliminar el bloque decorativo oscuro del manifiesto.
+- [x] Verificar ambos cambios en escritorio y móvil.
+- [x] Sustituir el titular final por el nuevo mensaje y comprobar su legibilidad.
+- [x] Cargar y aplicar la imagen adjunta en “La señal que se queda”.
+- [x] Verificar el encuadre de la nueva imagen en escritorio y móvil.
+- [x] Ajustar el logo de Vendea del footer para mostrarlo sin fondo.
+- [x] Verificar el logo transparente del footer en escritorio y móvil.
+- [x] Sustituir el manifiesto por el nuevo mensaje de marca, tienda y agentes.
+- [x] Verificar el contraste y la composición del manifiesto en escritorio y móvil.
+- [x] Asegurar la visibilidad del logo de Vendea en el header.
+- [x] Verificar el logo del header en escritorio y móvil.
+- [x] Cambiar a oscuro el texto de los globos claros de la franja móvil.
+- [x] Verificar la legibilidad de la franja de globos en escritorio y móvil.
+- [x] Localizar la variante clara del logo con transparencia real.
+- [x] Sustituir el logo del footer y verificar que desaparezca el recuadro blanco.
+- [x] Cargar y aplicar la imagen adjunta en “La respuesta en el momento preciso”.
+- [x] Verificar el encuadre de la nueva imagen en escritorio y móvil.
+- [x] Usar el logo transparente de Vendea en el header.
+- [x] Verificar que el logo del header sea visible en escritorio y móvil.
+- [x] Reemplazar el CTA final por “Cotiza aquí” y enlazarlo a WhatsApp.
+- [x] Añadir el globo flotante “Habla con Mafe” con mensaje automático de cotización.
+- [ ] Verificar los enlaces y el globo de WhatsApp en escritorio y móvil.
+- [x] Hacer visible el logo transparente de Vendea en el navbar.
+- [ ] Verificar el navbar con logo visible en escritorio y móvil.
+- [x] Ubicar el logo sin modificar la composición, colores ni controles existentes del navbar.
+- [x] Trasladar el logo al punto indicado sobre el titular dentro del hero.
+- [x] Verificar la nueva posición del logo en escritorio y móvil.
+- [x] Validar la revisión final antes de crear el checkpoint de publicación.
+- [x] Conectar el botón Hablemos del navbar al enlace de WhatsApp.
+- [x] Verificar el enlace Hablemos en escritorio y móvil.
+- [x] Retirar los íconos decorativos de estrella de las cards.
+- [x] Verificar las cards sin estrellas en escritorio y móvil.
+- [x] Evaluar las rutas de recursos estáticos para su compatibilidad con Vercel.
+- [x] Preparar la configuración de despliegue para Vercel.
+- [x] Publicar y verificar la landing en Vercel.
+- [ ] Revisar el estado del repositorio GitHub seleccionado y preparar la sincronización.
+- [ ] Subir la versión actual de la landing al repositorio de GitHub.
+- [ ] Vincular el repositorio de GitHub con el proyecto de Vercel.
+- [ ] Verificar los enlaces de GitHub y Vercel para despliegues automáticos.

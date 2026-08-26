@@ -1,0 +1,11 @@
+{
+  "buildCommand": "pnpm vite build",
+  "outputDirectory": "dist/public",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "rewrites": [
+    {
+      "source": "/manus-storage/:path*",
+      "destination": "https://vendeaexp-jyehnd9f.manus.space/manus-storage/:path*"
+    }
+  ]
+}
