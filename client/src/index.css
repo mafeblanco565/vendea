@@ -287,10 +287,10 @@ button:not(:disabled), a[href] { cursor: pointer; }
 @media (max-width: 640px) { .architecture-explainer-media, .architecture-explainer-media img { min-height: 190px; }.architecture-explainer-media { border-radius: 20px 26px 20px 24px; } }
 
 /* Estudio de Señales en Juego: la escena 3D llena el retrato existente y preserva el collage, los marcos y el fallback editorial. */
-.avatar-3d-component { position: absolute; inset: 0; overflow: hidden; }
-.avatar-3d-canvas { position: absolute !important; inset: 0; width: 100% !important; height: 100% !important; opacity: 1; transition: opacity .35s var(--ease-out); }
+.avatar-3d-component { position: absolute; inset: 0; overflow: hidden; isolation: isolate; }
+.avatar-3d-canvas { position: absolute !important; z-index: 1; inset: 0; width: 100% !important; height: 100% !important; opacity: 1; transition: opacity .35s var(--ease-out); }
 .avatar-3d-canvas canvas { display: block; width: 100% !important; height: 100% !important; outline: none; }
 .avatar-portrait .avatar-3d-poster { position: absolute; z-index: 2; inset: 0 !important; display: block; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center 20% !important; opacity: 1; transition: opacity .35s var(--ease-out); }
-.avatar-portrait .avatar-3d-poster.is-hidden { opacity: 0; pointer-events: none; }
+.avatar-3d-component.is-ready .avatar-3d-canvas { z-index: 3; }
 .avatar-portrait .avatar-3d-poster.is-static { z-index: 1; }
 @media (max-width: 640px) { .avatar-3d-component { position: absolute; inset: 0; } }

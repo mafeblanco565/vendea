@@ -15,6 +15,7 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
   // El GLB del hero usa Meshopt; evitamos inicializar Draco y activamos su decodificador de forma explícita.
   const { scene } = useGLTF(url, false, true);
   const groupRef = useRef<THREE.Group>(null);
+  const hasRenderedFrame = useRef(false);
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
@@ -34,15 +35,20 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     return clone;
   }, [scene]);
 
-  useEffect(() => onReady(), [onReady]);
-
   useFrame(({ clock }, delta) => {
     const group = groupRef.current;
     if (!group) return;
 
+    if (!hasRenderedFrame.current) {
+      hasRenderedFrame.current = true;
+      onReady();
+    }
+
     const dt = Math.min(delta, 0.1);
-    const targetYaw = pointer.current.x * 0.68;
-    const targetPitch = -pointer.current.y * 0.26;
+    const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24;
+    const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055;
+    const targetYaw = pointer.current.x * 0.68 + idleYaw;
+    const targetPitch = -pointer.current.y * 0.26 + idlePitch;
     const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
 
     group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
@@ -78,7 +84,7 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
   };
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 640px), (prefers-reduced-motion: reduce)");
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMode = () => setUseStaticFallback(media.matches);
     updateMode();
     media.addEventListener("change", updateMode);
@@ -88,7 +94,6 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
   useEffect(() => {
     if (useStaticFallback) return;
     const updatePointer = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return;
       updatePointerPosition(event.clientX, event.clientY);
     };
     const resetPointer = () => { pointer.current = { x: 0, y: 0 }; };
@@ -107,14 +112,17 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
 
   return (
     <div
-      className="avatar-3d-component"
+      className={`avatar-3d-component ${ready ? "is-ready" : ""}`}
       role="img"
       aria-label="Avatar 3D interactivo de Vendea"
       onPointerMove={(event) => {
-        if (event.pointerType !== "touch") updatePointerPosition(event.clientX, event.clientY);
+        updatePointerPosition(event.clientX, event.clientY);
+      }}
+      onPointerDown={(event) => {
+        updatePointerPosition(event.clientX, event.clientY);
       }}
     >
-      <img className={`avatar-3d-poster ${ready ? "is-hidden" : ""}`} src={fallbackSrc} alt="" draggable={false} />
+      {!ready && <img className="avatar-3d-poster" src={fallbackSrc} alt="" draggable={false} />}
       <Canvas
         className="avatar-3d-canvas"
         dpr={[1, 1.5]}
