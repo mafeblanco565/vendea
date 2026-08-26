@@ -12,7 +12,8 @@ interface HeroAvatar3DProps {
 }
 
 function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableRefObject<PointerPosition>; onReady: () => void }) {
-  const { scene } = useGLTF(url);
+  // El GLB del hero usa Meshopt; evitamos inicializar Draco y activamos su decodificador de forma explícita.
+  const { scene } = useGLTF(url, false, true);
   const groupRef = useRef<THREE.Group>(null);
 
   const model = useMemo(() => {
