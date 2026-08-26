@@ -13,18 +13,14 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import CursorAvatar from "@/components/CursorAvatar";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 
 const LOGO_DARK = "/manus-storage/vendea-logo-dark_c8f18de9.png";
 const LOGO_LIGHT = "/manus-storage/vendea-logo-horizontal-light_db365a31.png";
 const FOOTER_LOGO = "/manus-storage/vendea-logo-footer-true-transparent_11b27c0f.png";
-const AVATAR_CURSOR_FRAMES = {
-  center: "/manus-storage/vendea-avatar-cursor-center_60e69ccd.jpeg",
-  up: "/manus-storage/vendea-avatar-cursor-up_26dab588.jpeg",
-  left: "/manus-storage/vendea-avatar-cursor-left_045396cb.jpeg",
-  right: "/manus-storage/vendea-avatar-cursor-right_33614c33.jpeg",
-} as const;
+const AVATAR_FALLBACK = "/manus-storage/vendea-avatar-cursor-center_60e69ccd.jpeg";
+const AVATAR_3D_MODEL = "/manus-storage/vendea-avatar-hero_805d2cf1.glb";
+const HeroAvatar3D = lazy(() => import("@/components/HeroAvatar3D"));
 const PLAYFUL_ART = {
   signal: "/manus-storage/vendea-playful-signal-collage_c5452929.jpg",
   marketplace: "/manus-storage/vendea-marketplace-playground_56c8d4f5.jpg",
@@ -259,7 +255,9 @@ export default function Home() {
               <div className="avatar-orbit avatar-orbit-one" aria-hidden="true" />
               <div className="avatar-orbit avatar-orbit-two" aria-hidden="true" />
               <div className="avatar-portrait">
-                <CursorAvatar frames={AVATAR_CURSOR_FRAMES} />
+                <Suspense fallback={<img className="avatar-3d-poster is-static" src={AVATAR_FALLBACK} alt="Avatar de Vendea" draggable={false} />}>
+                  <HeroAvatar3D modelUrl={AVATAR_3D_MODEL} fallbackSrc={AVATAR_FALLBACK} />
+                </Suspense>
               </div>
               <div className="avatar-frame" aria-hidden="true"><i /><i /><i /><i /></div>
             </motion.div>
