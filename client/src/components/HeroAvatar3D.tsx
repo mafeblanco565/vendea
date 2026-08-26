@@ -40,13 +40,15 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     if (!group) return;
 
     const dt = Math.min(delta, 0.1);
-    const targetYaw = pointer.current.x * 0.28;
-    const targetPitch = -pointer.current.y * 0.14;
+    const targetYaw = pointer.current.x * 0.68;
+    const targetPitch = -pointer.current.y * 0.26;
+    const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
 
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 5.4, dt);
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 5.4, dt);
-    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.035, 5.4, dt);
-    group.position.y = Math.sin(clock.elapsedTime * 1.1) * 0.055;
+    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
+    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, targetPitch, 7.2, dt);
+    group.rotation.z = THREE.MathUtils.damp(group.rotation.z, pointer.current.x * -0.075, 7.2, dt);
+    group.position.x = THREE.MathUtils.damp(group.position.x, pointer.current.x * 0.14, 6.2, dt);
+    group.position.y = THREE.MathUtils.damp(group.position.y, floatY - pointer.current.y * 0.075, 6.2, dt);
   });
 
   return <group ref={groupRef}><primitive object={model} /></group>;
@@ -69,6 +71,11 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
   const [ready, setReady] = useState(false);
   const [useStaticFallback, setUseStaticFallback] = useState(false);
 
+  const updatePointerPosition = (clientX: number, clientY: number) => {
+    pointer.current.x = THREE.MathUtils.clamp((clientX / window.innerWidth) * 2 - 1, -1, 1);
+    pointer.current.y = THREE.MathUtils.clamp((clientY / window.innerHeight) * 2 - 1, -1, 1);
+  };
+
   useEffect(() => {
     const media = window.matchMedia("(max-width: 640px), (prefers-reduced-motion: reduce)");
     const updateMode = () => setUseStaticFallback(media.matches);
@@ -81,8 +88,7 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
     if (useStaticFallback) return;
     const updatePointer = (event: PointerEvent) => {
       if (event.pointerType === "touch") return;
-      pointer.current.x = THREE.MathUtils.clamp((event.clientX / window.innerWidth) * 2 - 1, -1, 1);
-      pointer.current.y = THREE.MathUtils.clamp((event.clientY / window.innerHeight) * 2 - 1, -1, 1);
+      updatePointerPosition(event.clientX, event.clientY);
     };
     const resetPointer = () => { pointer.current = { x: 0, y: 0 }; };
 
@@ -99,7 +105,14 @@ export default function HeroAvatar3D({ modelUrl, fallbackSrc }: HeroAvatar3DProp
   }
 
   return (
-    <div className="avatar-3d-component" role="img" aria-label="Avatar 3D interactivo de Vendea">
+    <div
+      className="avatar-3d-component"
+      role="img"
+      aria-label="Avatar 3D interactivo de Vendea"
+      onPointerMove={(event) => {
+        if (event.pointerType !== "touch") updatePointerPosition(event.clientX, event.clientY);
+      }}
+    >
       <img className={`avatar-3d-poster ${ready ? "is-hidden" : ""}`} src={fallbackSrc} alt="" draggable={false} />
       <Canvas
         className="avatar-3d-canvas"
