@@ -18,8 +18,8 @@ import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 const LOGO_DARK = "/manus-storage/vendea-logo-dark_c8f18de9.png";
 const LOGO_LIGHT = "/manus-storage/vendea-logo-horizontal-light_db365a31.png";
 const FOOTER_LOGO = "/manus-storage/vendea-logo-footer-true-transparent_11b27c0f.png";
-const AVATAR_FALLBACK = "/manus-storage/vendea-avatar-cursor-center_60e69ccd.jpeg";
-const AVATAR_3D_MODEL = "/manus-storage/vendea-avatar-hero-meshopt_007c0864.glb";
+const AVATAR_FALLBACK = "/avatar/center.webp";
+const AVATAR_3D_MODEL = "/avatar/avatar.glb";
 const HeroAvatar3D = lazy(() => import("@/components/HeroAvatar3D"));
 const PLAYFUL_ART = {
   signal: "/manus-storage/vendea-playful-signal-collage_c5452929.jpg",

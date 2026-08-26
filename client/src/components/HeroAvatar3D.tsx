@@ -48,7 +48,9 @@ function Model({ url, pointer, onReady }: { url: string; pointer: React.MutableR
     const idleYaw = Math.sin(clock.elapsedTime * 0.72) * 0.24;
     const idlePitch = Math.sin(clock.elapsedTime * 0.52 + 1.1) * 0.055;
     const targetYaw = pointer.current.x * 0.68 + idleYaw;
-    const targetPitch = -pointer.current.y * 0.26 + idlePitch;
+    // SIN el signo menos: en three.js un rotation.x positivo apunta la cara
+    // hacia abajo, y clientY ya crece hacia abajo. Negarlo invierte el eje.
+    const targetPitch = pointer.current.y * 0.26 + idlePitch;
     const floatY = Math.sin(clock.elapsedTime * 1.1) * 0.055;
 
     group.rotation.y = THREE.MathUtils.damp(group.rotation.y, targetYaw, 7.2, dt);
