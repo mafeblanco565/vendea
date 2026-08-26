@@ -32,7 +32,7 @@ const EXPLAINER_ART = {
   commerce: "/manus-storage/vendea-commerce-explainer_cb9ad5a4.jpg",
   conversation: "/manus-storage/vendea-conversation-explainer_db3121b4.jpg",
 } as const;
-const BRAND_SYSTEM_REFERENCE = "/manus-storage/vendea-brand-system-panorama_38d55cf5.jpeg";
+const BRAND_SYSTEM_REFERENCE = "/manus-storage/vendea-brand-system-desk_9a8750dc.webp";
 const MARKETPLACE_SHOPIFY_REFERENCE = "/manus-storage/vendea-marketplace-shopify-panorama_9ad818cc.jpeg";
 const CONVERSATIONAL_AI_REFERENCE = "/manus-storage/vendea-conversational-ai-panorama_b99db632.jpeg";
 const CLOSING_VIDEO = "/manus-storage/vendea-transition-loop_107d7476.mp4";
