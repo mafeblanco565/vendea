@@ -13,7 +13,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 
 const LOGO_DARK = "/manus-storage/vendea-logo-dark_c8f18de9.png";
 const LOGO_LIGHT = "/manus-storage/vendea-logo-horizontal-light_db365a31.png";
@@ -22,20 +22,20 @@ const AVATAR_FALLBACK = "/avatar/center.webp";
 const AVATAR_3D_MODEL = "/avatar/avatar.glb";
 const HeroAvatar3D = lazy(() => import("@/components/HeroAvatar3D"));
 const PLAYFUL_ART = {
-  signal: "/manus-storage/vendea-playful-signal-collage_c5452929.jpg",
-  marketplace: "/manus-storage/vendea-marketplace-playground_56c8d4f5.jpg",
-  conversation: "/manus-storage/vendea-conversation-bloom_2c74e559.jpg",
+  signal: "/manus-storage/vendea-playful-signal-collage-web_f330626e.webp",
+  marketplace: "/manus-storage/vendea-marketplace-playground-web_371ac119.webp",
+  conversation: "/manus-storage/vendea-conversation-bloom-web_ae6e613e.webp",
 } as const;
 const EXPLAINER_ART = {
-  system: "/manus-storage/vendea-system-explainer_7b599793.jpg",
-  identity: "/manus-storage/vendea-identity-explainer_5f946e8a.jpg",
-  commerce: "/manus-storage/vendea-commerce-explainer_cb9ad5a4.jpg",
-  conversation: "/manus-storage/vendea-conversation-explainer_db3121b4.jpg",
+  system: "/manus-storage/vendea-system-explainer-web_bcf3134a.webp",
+  identity: "/manus-storage/vendea-identity-explainer-web_367c9871.webp",
+  commerce: "/manus-storage/vendea-commerce-explainer-web_e4d1e7a7.webp",
+  conversation: "/manus-storage/vendea-conversation-explainer-web_82dafde8.webp",
 } as const;
 const BRAND_SYSTEM_REFERENCE = "/manus-storage/vendea-brand-system-desk_9a8750dc.webp";
-const MARKETPLACE_SHOPIFY_REFERENCE = "/manus-storage/vendea-marketplace-shopify-panorama_9ad818cc.jpeg";
-const CONVERSATIONAL_AI_REFERENCE = "/manus-storage/vendea-conversational-ai-panorama_b99db632.jpeg";
-const CLOSING_VIDEO = "/manus-storage/vendea-transition-loop_107d7476.mp4";
+const MARKETPLACE_SHOPIFY_REFERENCE = "/manus-storage/vendea-marketplace-shopify-panorama-web_746c7e35.webp";
+const CONVERSATIONAL_AI_REFERENCE = "/manus-storage/vendea-conversational-ai-panorama-web_fd0ec6a5.webp";
+const CLOSING_VIDEO = "/manus-storage/vendea-transition-loop-web_fc3d229e.mp4";
 const WHATSAPP_QUOTE_URL = "https://wa.me/573008615282?text=Mafe%20quiero%20cotizar%20para%20crear%20mi%20marca";
 
 const capabilityLine = [
@@ -98,7 +98,7 @@ const architectures = [
     className: "architecture-brand",
     visual: "signal",
     signal: "ATRAE",
-    image: "/manus-storage/vendea-signal-that-stays_502f8c2a.jpeg",
+    image: "/manus-storage/vendea-signal-that-stays-web_dbf29095.webp",
   },
   {
     number: "02",
@@ -120,7 +120,7 @@ const architectures = [
     className: "architecture-conversation",
     visual: "conversation",
     signal: "ACOMPAÑA",
-    image: "/manus-storage/vendea-moment-response_563789c5.jpeg",
+    image: "/manus-storage/vendea-moment-response-web_deb03e39.webp",
   },
 ];
 
@@ -160,6 +160,40 @@ function Marquee({ reverse = false }: { reverse?: boolean }) {
         </span>
       ))}
     </motion.div>
+  );
+}
+
+function DeferredClosingVideo() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || !("IntersectionObserver" in window)) {
+      setShouldLoad(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "900px 0px" },
+    );
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={frameRef} className="closing-video-frame" aria-hidden="true">
+      {shouldLoad && (
+        <video autoPlay loop muted playsInline preload="metadata">
+          <source src={CLOSING_VIDEO} type="video/mp4" />
+        </video>
+      )}
+    </div>
   );
 }
 
@@ -329,7 +363,7 @@ export default function Home() {
             return (
               <FadeIn delay={index * 0.08} key={solution.number}>
                 <article className={`solution-item solution-${solution.tone}`}>
-                  <div className="solution-art" aria-hidden="true"><img src={solution.art} alt="" /></div>
+                  <div className="solution-art" aria-hidden="true"><img src={solution.art} alt="" loading="lazy" decoding="async" /></div>
                   <div className="solution-stickers" aria-hidden="true"><span>{solution.signal}</span></div>
                   <div className="solution-number">{solution.number}</div>
                   <div className="solution-icon"><Icon size={28} strokeWidth={1.6} /></div>
@@ -383,7 +417,7 @@ export default function Home() {
                   <p>{item.copy}</p>
                 </div>
                 <figure className={`architecture-explainer-media media-${item.visual}`}>
-                  <img src={item.image} alt={`Ilustración de ${item.eyebrow.toLowerCase()} para Vendea`} />
+                  <img src={item.image} alt={`Ilustración de ${item.eyebrow.toLowerCase()} para Vendea`} loading="lazy" decoding="async" />
                   <figcaption>{item.signal}</figcaption>
                 </figure>
               </div>
@@ -403,11 +437,7 @@ export default function Home() {
       </section>
 
       <section id="contacto" className="closing-section closing-has-route">
-        <div className="closing-video-frame" aria-hidden="true">
-          <video autoPlay loop muted playsInline preload="metadata">
-            <source src={CLOSING_VIDEO} type="video/mp4" />
-          </video>
-        </div>
+        <DeferredClosingVideo />
         <div className="closing-content">
           <FadeIn>
             <p className="section-kicker">VEND EA / NEXT MOVE</p>
